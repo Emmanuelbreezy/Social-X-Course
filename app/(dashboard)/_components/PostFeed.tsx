@@ -10,12 +10,12 @@ interface PropsType {
 }
 
 const PostFeed: React.FC<PropsType> = ({ userId }) => {
-  const { data, isLoading } = usePosts();
+  const { data, isLoading } = usePosts(userId);
   const posts = data?.posts ?? [];
 
   if (isLoading) {
     return (
-      <div className="flex flex-col h-screen items-center w-full justify-center">
+      <div className="flex flex-col h-[25vh] items-center w-full justify-center">
         <Spinner size="icon" />
       </div>
     );

@@ -2,7 +2,7 @@
 import React, { useCallback, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { PostType } from "@/types/post.type";
-import { useSession } from "next-auth/react";
+//import { useSession } from "next-auth/react";
 import { formatDistanceToNowStrict } from "date-fns";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Dot, Heart, MessageCircle } from "lucide-react";
@@ -15,21 +15,21 @@ interface PropsType {
 
 const PostItem: React.FC<PropsType> = ({ post }) => {
   const router = useRouter();
-  const session = useSession();
-  const user = session?.data?.user;
-  console.log(session);
+  // const session = useSession();
+  // const user = session?.data?.user;
+  // console.log(session);
 
   const goToUser = useCallback(
     (event: { stopPropagation: () => void }) => {
       event.stopPropagation();
-      router.push(`/${user?.username}`);
+      router.push(`/${post?.user?.username}`);
     },
-    [router, user?.username]
+    [router, post?.user?.username]
   );
 
   const goToPost = useCallback(() => {
-    router.push(`/${user?.username}/status/${post.id}`);
-  }, [router, user?.username, post?.id]);
+    router.push(`/${post?.user?.username}/status/${post.id}`);
+  }, [router, post?.user?.username, post?.id]);
 
   const onLike = useCallback((event: { stopPropagation: () => void }) => {
     event.stopPropagation();
@@ -88,12 +88,20 @@ const PostItem: React.FC<PropsType> = ({ post }) => {
         <div className="w-full">
           <div className="flex flex-row items-center gap-[4px]">
             <div className="flex flex-row gap-[2px]">
-              <h5 className="text-white font-bold cursor-pointer hover:underline">
+              <h5
+                className="font-bold cursor-pointer hover:underline"
+                role="button"
+                onClick={goToUser}
+              >
                 {post?.user?.name}
               </h5>
               {post?.user.isVerified && post?.user.plan === "PRO" && <Badge />}
             </div>
-            <span className="!text-[#959fa8] text-sm inline-block truncate font-normal">
+            <span
+              className="!text-[#959fa8] text-sm inline-block truncate font-normal"
+              role="button"
+              onClick={goToUser}
+            >
               @{post?.user?.username}
             </span>
             <div className="flex items-center">

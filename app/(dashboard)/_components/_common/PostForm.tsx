@@ -101,7 +101,7 @@ const PostForm: FC<PropsType> = ({ placeholder, isComment, postId }) => {
                 <DraftEditor
                   placeholder={placeholder}
                   wrapperClassName="!min-h-6 !max-h-80 !border-none w-full"
-                  editorClassName="placeholder:text-muted-foreground peer outline-0 px-0 focus-visible:outline-none text-[20px] resize-none !py-0 w-full focus:border-0 !border-none "
+                  editorClassName="placeholder:text-muted-foreground peer outline-0 px-0 focus-visible:outline-none text-[18px] resize-none !py-0 w-full focus:border-0 !border-none "
                   editorState={editorState}
                   setEditorState={setEditorState}
                   onChange={(html) => {
@@ -133,6 +133,7 @@ const PostForm: FC<PropsType> = ({ placeholder, isComment, postId }) => {
                   type="submit"
                   variant="brandPrimary"
                   size="brandsm"
+                  disabled={loading || !form?.getValues()?.body}
                   className="
                         !h-auto
                         !text-white
