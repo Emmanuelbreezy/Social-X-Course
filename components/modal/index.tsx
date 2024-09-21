@@ -13,6 +13,7 @@ interface PropsType {
   isOpen: boolean;
   title: string;
   subTitle?: string;
+  showLogo?: boolean;
   body?: React.ReactElement;
   footer?: React.ReactElement;
   actionLabel?: string;
@@ -26,6 +27,7 @@ const Modal: React.FC<PropsType> = ({
   children,
   title,
   subTitle,
+  showLogo = true,
   isOpen,
   onClose,
   body,
@@ -46,11 +48,13 @@ const Modal: React.FC<PropsType> = ({
 
       <Dialog modal open={isOpen} onOpenChange={handleClose}>
         {/* <DialogTrigger asChild>{children}</DialogTrigger> */}
-        <DialogContent className="min-h-[350px] !max-w-[600px] pt-1 pb-10 !rounded-2xl">
+        <DialogContent className="min-h-[350px] max-h-[600px] !max-w-[600px] pt-5 pb-10 !rounded-2xl overflow-y-auto">
           <div className="dialog_top_header w-full">
-            <div className="logo_section w-full h-[53px] flex items-center justify-center">
-              <Logo />
-            </div>
+            {showLogo && (
+              <div className="logo_section w-full h-[53px] flex items-center justify-center">
+                <Logo width="40px" height="40px" />
+              </div>
+            )}{" "}
             <div className="pt-5 pb-0 px-5">
               <h1 className="leading-9 font-bold text-[31px]">{title}</h1>
               {subTitle && (

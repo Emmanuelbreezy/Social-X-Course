@@ -6,6 +6,9 @@ import { Spinner } from "@/components/spinner";
 import Header from "../../_components/_common/Header";
 import UserHero from "../../_components/UserHero";
 import UserBio from "../../_components/UserBio";
+import Logo from "@/components/logo";
+import { UserType } from "@/types/user.type";
+import PostFeed from "../../_components/PostFeed";
 
 const SingleUser = () => {
   const param = useParams();
@@ -15,7 +18,8 @@ const SingleUser = () => {
 
   if (isLoading || !data) {
     return (
-      <div className="flex h-full items-center justify-center">
+      <div className="flex flex-col h-full items-center justify-center">
+        <Logo width="50px" height="50px" className="animate-pulse" />
         <Spinner size="icon" />
       </div>
     );
@@ -24,14 +28,9 @@ const SingleUser = () => {
   return (
     <Fragment>
       <Header label={fetchedUser?.name || ""} showBackArrow />
-      <UserHero
-        id={fetchedUser?.id}
-        image={fetchedUser?.image}
-        name={fetchedUser?.name}
-        username={username}
-        coverImage={fetchedUser?.coverImage}
-      />
+      <UserHero user={fetchedUser} />
       <UserBio user={fetchedUser} />
+      <PostFeed userId={fetchedUser?.id} />
     </Fragment>
   );
 };

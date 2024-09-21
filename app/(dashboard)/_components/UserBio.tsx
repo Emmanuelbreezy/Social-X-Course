@@ -1,9 +1,12 @@
+"use client";
 import React, { useMemo } from "react";
 import { format } from "date-fns";
+import { CalendarCheck } from "lucide-react";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import { Button } from "@/components/ui/button";
 import Badge from "@/components/badge";
-import { Calendar, CalendarCheck } from "lucide-react";
+import { useStore } from "@/hooks/useStore";
+import { UserType } from "@/types/user.type";
 
 interface PropsType {
   user: UserType;
@@ -12,6 +15,7 @@ interface PropsType {
 const UserBio: React.FC<PropsType> = ({ user }) => {
   const { data } = useCurrentUser();
   const currentUser = data?.currentUser ?? {};
+  const { openEditModal } = useStore();
 
   const createdAt = useMemo(() => {
     if (!user?.createdAt) {
@@ -22,9 +26,13 @@ const UserBio: React.FC<PropsType> = ({ user }) => {
   }, [user?.createdAt]);
   return (
     <div className="border-b-[1px] pb-4">
-      <div className="flex justify-end p-2 pt-5 px-4">
+      <div className="flex justify-end p-2 pt-3 px-4">
         {currentUser?.id === user?.id ? (
-          <Button variant="outline" className="!border-[rgb(83,100,113)]">
+          <Button
+            variant="outline"
+            className="!border-[rgb(83,100,113)]"
+            onClick={openEditModal}
+          >
             Edit profile{" "}
           </Button>
         ) : (
@@ -34,15 +42,15 @@ const UserBio: React.FC<PropsType> = ({ user }) => {
       <div className="mt-7 px-4">
         <div className="flex flex-col">
           <div className="flex items-center flex-row gap-1">
-            <h5 className="text-2xl font-semibold">{user?.name}</h5>
+            <h5 className="text-2xl font-black">{user?.name}</h5>
             {user.isVerified && user.plan === "PRO" && <Badge />}
           </div>
-          <p className="!text-[#959fa8] text-sm block truncate font-medium">
+          <p className="!text-[#959fa8] text-base block truncate font-normal">
             @{user.username || "no username"}
           </p>
         </div>
-        <div className="flex flex-col mt-4">
-          <p className="text-sm">{user?.bio}</p>
+        <div className="flex flex-col mt-4 pr-10">
+          <p className="text-base dark:text-white/90">{user?.bio}</p>
         </div>
         <div className="flex flex-row items-center gap-1 text-[rgb(113,118,123)] text-[15px] mt-4">
           <CalendarCheck size={17} />

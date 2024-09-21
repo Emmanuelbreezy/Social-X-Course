@@ -1,7 +1,9 @@
+"use client";
 import React, { FC, Fragment, useCallback } from "react";
 import { Ellipsis, LucideIcon } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useRouter } from "next/navigation";
+import Logo from "@/components/logo";
 
 interface PropsType {
   label?: string;
@@ -50,13 +52,18 @@ const SidebarItem: FC<PropsType> = (props) => {
       >
         {isUser && userInfo ? (
           <Avatar>
-            <AvatarImage src={userInfo?.profileImgUrl} />
+            <AvatarImage
+              src={userInfo?.profileImgUrl}
+              className="object-cover"
+            />
             <AvatarFallback className="font-bold text-[18px]">
               {userInfo?.fullname?.[0]}
             </AvatarFallback>
           </Avatar>
         ) : (
           <>
+            {href === "/premium" && <Logo width="28px" height="28px" />}
+
             {Icon && (
               <Icon size={28} className="text-[#14171A] dark:text-white" />
             )}
@@ -82,7 +89,10 @@ const SidebarItem: FC<PropsType> = (props) => {
         {isUser && userInfo ? (
           <div className="flex flex-row w-full gap-3">
             <Avatar>
-              <AvatarImage src={userInfo?.profileImgUrl} />
+              <AvatarImage
+                src={userInfo?.profileImgUrl}
+                className="object-cover"
+              />
               <AvatarFallback className="font-bold text-[18px]">
                 {userInfo?.fullname?.[0]}
               </AvatarFallback>
@@ -101,6 +111,7 @@ const SidebarItem: FC<PropsType> = (props) => {
           </div>
         ) : (
           <Fragment>
+            {href === "/premium" && <Logo width="24px" height="24px" />}
             {Icon && (
               <Icon size={24} className="text-[#14171A] dark:text-white" />
             )}

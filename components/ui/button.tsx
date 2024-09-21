@@ -41,7 +41,7 @@ const buttonVariants = cva(
         sm: "h-8 px-3 text-xs",
         lg: "!h-[52px] px-8",
         icon: "h-9 w-9",
-        brandsm: "text-md px-4 py-2",
+        brandsm: "text-md px-4 !py-2",
         brandlg: "text-xl px-5 py-3 w-full",
       },
     },

@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import { DM_Sans } from "next/font/google";
-import "./globals.css";
 import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/context/theme-provider";
 import SessionProviders from "@/context/session-provider";
 import { Toaster } from "@/components/ui/toaster";
+
+import "./globals.css";
 
 const dmSans = DM_Sans({ subsets: ["latin"] });
 

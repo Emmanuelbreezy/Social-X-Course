@@ -16,6 +16,7 @@ import { Input } from "@/components/ui/input";
 import { Spinner } from "@/components/spinner";
 import axios from "axios";
 import { toast } from "@/hooks/use-toast";
+import { BASE_URL } from "@/lib/base-url";
 
 const RegisterFormModal = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -52,14 +53,13 @@ const RegisterFormModal = () => {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       setLoading(true);
-      const response = await axios.post(`http://localhost:3000/api/register`, {
+      await axios.post(`${BASE_URL}api/register`, {
         email: values.email,
         password: values.password,
         name: values.name,
         username: values.username,
         dateOfBirth: values.dateOfBirth,
       });
-      console.log(response);
       toast({
         title: "Sucess",
         description: "Registered successfully",
@@ -67,10 +67,9 @@ const RegisterFormModal = () => {
       });
       handleClose();
     } catch (err) {
-      console.log(err);
       toast({
         title: "Error",
-        description: "Invalid credentials",
+        description: "Failed to register",
         variant: "destructive",
       });
     } finally {

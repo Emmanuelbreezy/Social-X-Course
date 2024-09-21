@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prismadb";
-import { signUpSchema } from "@/lib/auth-validate";
 import { auth } from "@/lib/auth";
 
 export async function PATCH(request: Request) {
