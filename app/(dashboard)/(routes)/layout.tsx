@@ -9,6 +9,7 @@ import { auth } from "@/lib/auth";
 
 async function MainLayout({ children }: { children: ReactNode }) {
   const session = await auth();
+
   // if (status === "loading") {
   //   return (
   //     <div className="flex flex-col h-screen items-center w-full justify-center">
@@ -25,20 +26,21 @@ async function MainLayout({ children }: { children: ReactNode }) {
   if (!session?.user) {
     return redirect("/");
   }
+
   return (
     <Fragment>
       <EditProfileModal />
       <div className="h-screen">
         <div className="container h-full mx-auto xl:px-30 max-w-7xl">
           <div className="flex items-start justify-center h-full">
-            <div className="shrink-0 flex-[0.28] relative">
+            <div className="shrink-0 flex-[0.1]  lg:flex-[0.28] relative">
               <Sidebar />
             </div>
-            <div className="flex flex-row flex-1 gap-0 lg:gap-8">
-              <main className="!bg-background max-w-[600px] relative h-auto flex-[0.95] border-x dark:border-[rgb(47,51,54)]">
+            <div className="flex flex-row h-screen flex-1 gap-0 lg:gap-8">
+              <main className="!bg-background lg:max-w-[600px] relative h-screen flex-1 lg:flex-[0.95] border-x dark:border-[rgb(47,51,54)]">
                 <div className="w-full">{children}</div>
               </main>
-              <div className="shrink-0 relative min-h-[300px]">
+              <div className="hidden lg:flex shrink-0 relative min-h-[600px]">
                 <Rightbar />
               </div>
             </div>

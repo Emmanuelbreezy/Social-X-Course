@@ -1,16 +1,16 @@
 export type UserType = {
   id: number;
-  name: string;
-  username: string | null;
+  name: string | null;
+  username: string;
   bio: string | null;
   email: string;
-  dateOfBirth: string | null;
-  emailVerified: boolean | null;
-  image: string;
+  dateOfBirth: Date | null;
+  emailVerified: Date | null;
+  image: string | null;
   coverImage: string | null;
   profileImage: string | null;
-  createdAt: string;
-  updatedAt: string;
+  createdAt: Date;
+  updatedAt: Date;
   followingIds: number[];
   hasNotification: boolean | null;
   isVerified: boolean;

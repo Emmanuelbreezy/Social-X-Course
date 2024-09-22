@@ -6,6 +6,7 @@ import useUsers from "@/hooks/useUsers";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Badge from "@/components/badge";
 import { UserType } from "@/types/user.type";
+import FollowButton from "./_common/FollowButton";
 
 const FollowList = () => {
   const { data, isLoading } = useUsers();
@@ -45,7 +46,7 @@ const FollowList = () => {
               >
                 <Avatar className="transition cursor-pointer hover:opacity-90">
                   <AvatarImage
-                    src={user?.profileImage || user?.image}
+                    src={user?.profileImage || user?.image || ""}
                     className="object-cover"
                   />
                   <AvatarFallback className="font-bold text-[18px]">
@@ -80,7 +81,10 @@ const FollowList = () => {
                   </div>
                 </div>
                 <div className="flex-shrink">
-                  <button>follow</button>
+                  <FollowButton
+                    userId={user?.id}
+                    username={user?.username as string}
+                  />
                 </div>
               </div>
             </li>

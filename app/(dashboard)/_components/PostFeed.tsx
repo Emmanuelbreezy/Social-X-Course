@@ -7,10 +7,11 @@ import { Spinner } from "@/components/spinner";
 
 interface PropsType {
   userId?: number;
+  postId?: number;
 }
 
-const PostFeed: React.FC<PropsType> = ({ userId }) => {
-  const { data, isLoading } = usePosts(userId);
+const PostFeed: React.FC<PropsType> = ({ userId, postId }) => {
+  const { data, isLoading } = usePosts({ userId, postId });
   const posts = data?.posts ?? [];
 
   if (isLoading) {

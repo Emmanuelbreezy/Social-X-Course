@@ -16,7 +16,7 @@ const Header: FC<PropsType> = ({ label, children, showBackArrow }) => {
   }, [router]);
   return (
     <div className="border-b-[1px] dark:border-[rgb(47,51,54)] p-5">
-      <div className="flex flex-row items-center gap-2">
+      <div className="flex flex-row items-center gap-5">
         {showBackArrow && (
           <ArrowLeft
             onClick={handleBack}

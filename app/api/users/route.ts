@@ -46,7 +46,6 @@ export async function GET() {
       data: users,
     });
   } catch (error) {
-    console.log(error);
     return NextResponse.json(
       {
         message: "Failed to retrieve data",

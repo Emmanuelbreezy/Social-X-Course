@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import Badge from "@/components/badge";
 import { useStore } from "@/hooks/useStore";
 import { UserType } from "@/types/user.type";
+import FollowButton from "./_common/FollowButton";
 
 interface PropsType {
   user: UserType;
@@ -36,7 +37,7 @@ const UserBio: React.FC<PropsType> = ({ user }) => {
             Edit profile{" "}
           </Button>
         ) : (
-          <Button variant="brandSecondary">Follow</Button>
+          <FollowButton userId={user?.id} username={user?.username as string} />
         )}
       </div>
       <div className="mt-7 px-4">

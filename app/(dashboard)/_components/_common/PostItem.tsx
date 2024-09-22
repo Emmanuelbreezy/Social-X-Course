@@ -28,7 +28,7 @@ const PostItem: React.FC<PropsType> = ({ post }) => {
   );
 
   const goToPost = useCallback(() => {
-    router.push(`/${post?.user?.username}/status/${post.id}`);
+    router.push(`/${post?.user?.username}/post/${post.id}`);
   }, [router, post?.user?.username, post?.id]);
 
   const onLike = useCallback((event: { stopPropagation: () => void }) => {
@@ -45,7 +45,6 @@ const PostItem: React.FC<PropsType> = ({ post }) => {
       {}
     );
 
-    console.log(timeDifference, "timeDifference");
     const timeParts = timeDifference.split(" ");
     let formattedTime;
 
@@ -77,7 +76,7 @@ const PostItem: React.FC<PropsType> = ({ post }) => {
       <div className="flex flex-row items-start gap-3">
         <Avatar role="button" onClick={goToUser}>
           <AvatarImage
-            src={post?.user?.profileImage || post?.user?.image}
+            src={post?.user?.profileImage || post?.user?.image || ""}
             alt={post?.user.username || ""}
             className="object-cover"
           />

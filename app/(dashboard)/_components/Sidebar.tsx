@@ -104,7 +104,7 @@ const Sidebar = () => {
                       username: fetchedUser?.username || "",
                       fullname: fetchedUser?.name || "",
                       profileImgUrl:
-                        fetchedUser?.profileImage || fetchedUser?.image,
+                        fetchedUser?.profileImage || fetchedUser?.image || "",
                     }}
                   />
                 </DropdownMenuTrigger>

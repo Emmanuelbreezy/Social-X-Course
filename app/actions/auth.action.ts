@@ -22,7 +22,6 @@ export async function doCredentialLogin(data: {
       email: data.email,
       password: data.password,
     });
-    console.log(response);
     return response;
   } catch (err) {
     throw err;
@@ -38,6 +37,24 @@ export async function currentUser() {
     const currentUser = await prisma.user.findUnique({
       where: {
         email: session.user.email,
+      },
+      select: {
+        id: true,
+        name: true,
+        username: true,
+        bio: true,
+        email: true,
+        dateOfBirth: true,
+        emailVerified: true,
+        image: true,
+        coverImage: true,
+        profileImage: true,
+        createdAt: true,
+        updatedAt: true,
+        followingIds: true,
+        hasNotification: true,
+        isVerified: true,
+        plan: true,
       },
     });
 

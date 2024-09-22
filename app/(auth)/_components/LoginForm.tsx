@@ -36,12 +36,11 @@ const LoginForm = () => {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       setLoading(true);
-      const response = await doCredentialLogin({
+      await doCredentialLogin({
         email: values.email,
         password: values.password,
       });
 
-      console.log(response);
       toast({
         title: "Sucess",
         description: "login successfully",

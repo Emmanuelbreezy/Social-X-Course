@@ -1,5 +1,5 @@
 "use client";
-import React, { FC, useCallback, useState } from "react";
+import React, { FC, useCallback } from "react";
 import dynamic from "next/dynamic";
 import { convertToRaw, EditorState } from "draft-js";
 import draftToHtml from "draftjs-to-html";
