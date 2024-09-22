@@ -26,7 +26,7 @@ export async function POST(request: Request) {
     return NextResponse.json(
       {
         data: post,
-        message: "Created post successfully",
+        message: "Post created successfully",
         status: "success",
       },
       { status: 201 }

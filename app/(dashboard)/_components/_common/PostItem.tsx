@@ -8,16 +8,20 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Dot, Heart, MessageCircle } from "lucide-react";
 import Badge from "@/components/badge";
 import Image from "next/image";
+import useLike from "@/hooks/useLike";
+import { Spinner } from "@/components/spinner";
 interface PropsType {
   userId?: number;
   post: PostType;
 }
 
-const PostItem: React.FC<PropsType> = ({ post }) => {
+const PostItem: React.FC<PropsType> = React.memo(({ post, userId }) => {
   const router = useRouter();
-  // const session = useSession();
-  // const user = session?.data?.user;
-  // console.log(session);
+  const { hasLiked, loading, toggleLike } = useLike(
+    post?.id,
+    post?.likedIds,
+    userId
+  );
 
   const goToUser = useCallback(
     (event: { stopPropagation: () => void }) => {
@@ -31,9 +35,13 @@ const PostItem: React.FC<PropsType> = ({ post }) => {
     router.push(`/${post?.user?.username}/post/${post.id}`);
   }, [router, post?.user?.username, post?.id]);
 
-  const onLike = useCallback((event: { stopPropagation: () => void }) => {
-    event.stopPropagation();
-  }, []);
+  const onLike = useCallback(
+    (event: { stopPropagation: () => void }) => {
+      event.stopPropagation();
+      toggleLike();
+    },
+    [toggleLike]
+  );
 
   const createdAt = useMemo(() => {
     if (!post.createdAt) {
@@ -62,6 +70,7 @@ const PostItem: React.FC<PropsType> = ({ post }) => {
 
     return formattedTime;
   }, [post.createdAt]);
+
   return (
     <article
       role="button"
@@ -135,26 +144,31 @@ const PostItem: React.FC<PropsType> = ({ post }) => {
             "
             >
               <MessageCircle size={15} />
-              <p>{post?.comments?.length || 0}</p>
+              <span className="text-sm">{post?.comments?.length || 0}</span>
             </div>
             <div
               onClick={onLike}
-              className="flex flex-row 
+              className={`flex flex-row 
               items-center gap-1
             text-[#959fa8]
             cursor-pointer
             transition
-            hover:text-red-500
-            "
+            hover:text-red-500 ${loading ? "pointer-events-none" : ""}`}
             >
-              <Heart size={15} />
-              <p>{post?.likedIds?.length || 0}</p>
+              {loading && <Spinner />}
+              <Heart
+                className={hasLiked ? "fill-red-500 !stroke-red-500" : ""}
+                size={15}
+              />
+              <span className="text-sm">{post?.likedIds?.length || 0}</span>
             </div>
           </div>
         </div>
       </div>
     </article>
   );
-};
+});
+
+PostItem.displayName = "PostItem";
 
 export default PostItem;

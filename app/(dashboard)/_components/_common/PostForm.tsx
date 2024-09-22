@@ -1,8 +1,12 @@
 "use client";
-import React, { FC, useCallback, useState } from "react";
+import React, { FC, useCallback, useMemo, useState } from "react";
+import Image from "next/image";
 import { z } from "zod";
 import axios from "axios";
+import Link from "next/link";
 import { FormProvider, useForm } from "react-hook-form";
+import { ImageIcon } from "lucide-react";
+import { EditorState } from "draft-js";
 import usePosts from "@/hooks/usePosts";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -13,28 +17,36 @@ import { BASE_URL } from "@/lib/base-url";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { DraftEditor } from "@/components/draft-editor";
 import { Button } from "@/components/ui/button";
-import { ImageIcon } from "lucide-react";
 import { Spinner } from "@/components/spinner";
-import { EditorState } from "draft-js";
-import Image from "next/image";
 import useUploadcare from "@/hooks/useUploadcare";
+import { postComment } from "@/app/actions/coment.action";
 
 interface PropsType {
   placeholder: string;
   isComment?: boolean;
+  postUsername?: string;
   postId?: number;
 }
-const PostForm: FC<PropsType> = ({ placeholder, postId }) => {
+const PostForm: FC<PropsType> = ({
+  placeholder,
+  isComment,
+  postId,
+  postUsername,
+}) => {
   const { base64, uploading } = useUploadcare();
   const { data, isLoading } = useCurrentUser();
-  const { username, name, profileImage, image }: UserType =
-    data?.currentUser ?? {};
   const { mutate } = usePosts({ postId });
 
   const [loading, setLoading] = useState(false);
   const [editorState, setEditorState] = useState<EditorState>(
     EditorState.createEmpty()
   );
+
+  const currentUser = useMemo(() => {
+    return data?.currentUser ?? {};
+  }, [data]);
+
+  const { username, name, profileImage, image }: UserType = currentUser;
 
   const formSchema = z.object({
     body: z.string(),
@@ -51,28 +63,44 @@ const PostForm: FC<PropsType> = ({ placeholder, postId }) => {
     async (values: z.infer<typeof formSchema>) => {
       try {
         setLoading(true);
-        await axios.post(`${BASE_URL}api/posts`, {
-          body: values.body,
-        });
+        console.log(isComment, postId, "post");
+
+        if (isComment && postId) {
+          const response = await postComment({
+            body: values.body,
+            postId: postId,
+          });
+          console.log(response);
+          toast({
+            title: "Success",
+            description: response?.message,
+            variant: "default",
+          });
+        } else {
+          await axios.post(`${BASE_URL}api/posts`, {
+            body: values.body,
+          });
+          toast({
+            title: "Success",
+            description: "Post created successfully",
+            variant: "default",
+          });
+        }
         setEditorState(EditorState.createEmpty());
         form.reset();
         mutate();
-        toast({
-          title: "Sucess",
-          description: "Post created successfully",
-          variant: "default",
-        });
       } catch (err) {
         toast({
           title: "Error",
-          description: "Failed to create post",
+          description: "Failed to create post or comment",
           variant: "destructive",
         });
       } finally {
         setLoading(false);
       }
     },
-    [form, mutate]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [isComment, postId]
   );
 
   return (
@@ -99,6 +127,16 @@ const PostForm: FC<PropsType> = ({ placeholder, postId }) => {
                 </Avatar>
               </div>
               <div className="flex flex-col gap-1 flex-1">
+                {isComment && (
+                  <div className="flex items-center">
+                    <p className="!text-[#959fa8] text-sm font-normal">
+                      Replying to{" "}
+                      <Link className="!text-primary" href={`/${postUsername}`}>
+                        @{postUsername}
+                      </Link>
+                    </p>
+                  </div>
+                )}
                 <div className="min-h-6 peer !max-h-80 overflow-auto overflow-x-hidden mb-3">
                   <DraftEditor
                     placeholder={placeholder}
@@ -139,7 +177,7 @@ const PostForm: FC<PropsType> = ({ placeholder, postId }) => {
                     <Button
                       type="button"
                       variant="ghost"
-                      className="!text-[rgb(29,155,240)] !p-0 gap-1 !bg-transparent"
+                      className="!text-primary !p-0 gap-1 !bg-transparent"
                     >
                       <ImageIcon
                         color="rgb(29,155,240)"
@@ -163,7 +201,13 @@ const PostForm: FC<PropsType> = ({ placeholder, postId }) => {
                         font-semibold
                         text-base"
                   >
-                    {loading ? <Spinner size="default" /> : "Post"}
+                    {loading ? (
+                      <Spinner size="default" />
+                    ) : isComment ? (
+                      "Reply"
+                    ) : (
+                      "Post"
+                    )}
                   </Button>
                 </div>
               </div>
@@ -175,4 +219,5 @@ const PostForm: FC<PropsType> = ({ placeholder, postId }) => {
   );
 };
 
+PostForm.displayName = "PostForm";
 export default PostForm;

@@ -20,7 +20,6 @@ export async function followUser(userId: number) {
     }
 
     let updatedFollowingIds = [...(user.followingIds || [])];
-    console.log(updatedFollowingIds, "updatedFollowingIds");
 
     if (updatedFollowingIds.includes(userId)) {
       updatedFollowingIds = updatedFollowingIds.filter(
