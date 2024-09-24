@@ -5,7 +5,6 @@ import { z } from "zod";
 import axios from "axios";
 import Link from "next/link";
 import { FormProvider, useForm } from "react-hook-form";
-import { ImageIcon } from "lucide-react";
 import { EditorState } from "draft-js";
 import usePosts from "@/hooks/usePosts";
 import useCurrentUser from "@/hooks/useCurrentUser";
@@ -20,6 +19,7 @@ import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/spinner";
 import useUploadcare from "@/hooks/useUploadcare";
 import { postComment } from "@/app/actions/coment.action";
+import UploadButton from "@/components/upload-button";
 
 interface PropsType {
   placeholder: string;
@@ -33,8 +33,10 @@ const PostForm: FC<PropsType> = ({
   postId,
   postUsername,
 }) => {
-  const { base64, uploading } = useUploadcare();
+  const { base64, uploadFile, uploadedUrl, uploading, clearFile } =
+    useUploadcare();
   const { data, isLoading } = useCurrentUser();
+  const { mutate: mutatePosts } = usePosts({});
   const { mutate } = usePosts({ postId });
 
   const [loading, setLoading] = useState(false);
@@ -63,14 +65,13 @@ const PostForm: FC<PropsType> = ({
     async (values: z.infer<typeof formSchema>) => {
       try {
         setLoading(true);
-        console.log(isComment, postId, "post");
 
         if (isComment && postId) {
           const response = await postComment({
             body: values.body,
             postId: postId,
+            commentImage: uploadedUrl || "",
           });
-          console.log(response);
           toast({
             title: "Success",
             description: response?.message,
@@ -79,6 +80,7 @@ const PostForm: FC<PropsType> = ({
         } else {
           await axios.post(`${BASE_URL}api/posts`, {
             body: values.body,
+            postImage: uploadedUrl || "",
           });
           toast({
             title: "Success",
@@ -88,6 +90,8 @@ const PostForm: FC<PropsType> = ({
         }
         setEditorState(EditorState.createEmpty());
         form.reset();
+        clearFile();
+        mutatePosts();
         mutate();
       } catch (err) {
         toast({
@@ -99,8 +103,15 @@ const PostForm: FC<PropsType> = ({
         setLoading(false);
       }
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [isComment, postId]
+    [clearFile, form, isComment, mutate, mutatePosts, postId, uploadedUrl]
+  );
+
+  const handleUploadFile = useCallback(
+    async (file: File) => {
+      if (!file) return;
+      await uploadFile(file);
+    },
+    [uploadFile]
   );
 
   return (
@@ -159,7 +170,7 @@ const PostForm: FC<PropsType> = ({
                         alt=""
                         className="w-full h-full rounded-md object-cover"
                       />
-                      {!uploading && (
+                      {uploading && (
                         <div className="absolute inset-0 w-full h-full bg-gray-950/30 flex items-center justify-center">
                           <Spinner size="lg" />
                         </div>
@@ -174,26 +185,16 @@ const PostForm: FC<PropsType> = ({
                 />
                 <div className="w-full flex items-center justify-between">
                   <div className="flex items-center flex-1">
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      className="!text-primary !p-0 gap-1 !bg-transparent"
-                    >
-                      <ImageIcon
-                        color="rgb(29,155,240)"
-                        size="16px"
-                        className="shrink-0"
-                      />
-                      <span className="font-semibold text-sm">
-                        Upload photo
-                      </span>
-                    </Button>
+                    <UploadButton
+                      disabled={uploading}
+                      onFileSelect={handleUploadFile}
+                    />
                   </div>
                   <Button
                     type="submit"
                     variant="brandPrimary"
                     size="brandsm"
-                    disabled={loading || !form?.getValues()?.body}
+                    disabled={loading || uploading || !form?.getValues()?.body}
                     className="
                         !h-auto
                         !text-white

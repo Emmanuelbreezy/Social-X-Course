@@ -124,12 +124,13 @@ const PostItem: React.FC<PropsType> = React.memo(({ post, userId }) => {
             <div dangerouslySetInnerHTML={{ __html: post.body }} />
           </div>
           {post?.postImage && (
-            <div className="w-full my-3 h-80 rounded-md bg-[#eee] dark:bg-gray-600">
+            <div className="relative w-full my-3 h-80 overflow-hidden rounded-md bg-[#eee] dark:bg-gray-600">
               <Image
-                fill
                 src={post?.postImage}
-                alt={post?.user?.username || ""}
-                className="w-full h-full object-cover rounded-md"
+                alt={post?.user?.username || "Image"}
+                fill
+                loading="lazy"
+                className="object-cover rounded-md"
               />
             </div>
           )}

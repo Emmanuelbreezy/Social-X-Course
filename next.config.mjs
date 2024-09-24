@@ -4,6 +4,11 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: "https",
+        hostname: "ucarecdn.com",
+        port: "",
+      },
+      {
+        protocol: "https",
         hostname: "i.pravatar.cc",
         port: "",
       },

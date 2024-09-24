@@ -2,8 +2,12 @@
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prismadb";
 
-export async function postComment(data: { postId: number; body: string }) {
-  const { postId, body } = data;
+export async function postComment(data: {
+  postId: number;
+  body: string;
+  commentImage?: string;
+}) {
+  const { postId, body, commentImage } = data;
   const session = await auth();
   if (!session?.user?.id) {
     throw new Error("Not signed in");
@@ -24,6 +28,7 @@ export async function postComment(data: { postId: number; body: string }) {
         body,
         userId: currentUserId,
         postId: postId,
+        commentImage: commentImage,
       },
     });
 

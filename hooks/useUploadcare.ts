@@ -62,12 +62,18 @@ const useUploadcare = () => {
     }
   }, []);
 
+  const clearFile = useCallback(() => {
+    setBase64("");
+    setUploadedUrl("");
+  }, []);
+
   return {
     uploadFile,
     progress,
     uploadedUrl,
     base64,
     uploading,
+    clearFile,
   };
 };
 

@@ -6,6 +6,7 @@ export type CommentType = {
   body: string;
   userId: number;
   postId: number;
+  commentImage: string;
   createdAt: string;
   updatedAt: string;
   user: UserType;

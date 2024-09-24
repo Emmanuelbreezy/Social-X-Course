@@ -9,6 +9,7 @@ import usePosts from "./usePosts";
 const useLike = (postId: number, likedIds: number[], userId?: number) => {
   const { data } = useCurrentUser();
   //const session = useSession();
+  //const { mutate: mutatePosts } = usePosts({});
   const { mutate: mutateFetchPost } = usePosts({
     postId: postId,
   });
@@ -45,6 +46,7 @@ const useLike = (postId: number, likedIds: number[], userId?: number) => {
       setLoading(false);
     }
   }, [mutateFetchPost, mutateFetchPosts, postId]);
+
   return {
     loading,
     hasLiked,

@@ -5,4 +5,5 @@ export const postSchema = object({
     1,
     "Body is required"
   ),
+  postImage: string(),
 });
