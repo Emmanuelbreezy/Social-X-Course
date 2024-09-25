@@ -4,10 +4,10 @@ import bcrypt from "bcryptjs";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
-import { signInSchema } from "./validation/auth-validate";
-import { prisma } from "./prismadb";
-import { generateBaseUsername } from "./helper";
 import { ensureUniqueUsername } from "@/app/actions/auth.action";
+import { signInSchema } from "./validation/auth-validate";
+import { generateBaseUsername } from "./helper";
+import { prisma } from "./prismadb";
 
 export const {
   auth,
@@ -16,7 +16,7 @@ export const {
   signOut,
 } = NextAuth({
   adapter: PrismaAdapter(prisma),
-
+  secret: process.env.AUTH_SECRET,
   providers: [
     GoogleProvider({
       clientId: process.env.AUTH_GOOGLE_ID,
@@ -35,12 +35,10 @@ export const {
     }),
     CredentialsProvider({
       credentials: {
-        //username: { label: "emailOrUsername", type: "text" },
         email: { label: "email", type: "email" },
         password: { label: "password", type: "password" },
       },
       authorize: async (credentials): Promise<any> => {
-        //const emailOrUsername = credentials.email;
         if (!credentials?.email || !credentials?.password) {
           throw new Error("Invalid credentials");
         }
