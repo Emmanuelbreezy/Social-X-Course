@@ -27,6 +27,22 @@ export async function followUser(userId: number) {
       );
     } else {
       updatedFollowingIds.push(userId);
+      try {
+        await prisma.$transaction([
+          prisma.notification.create({
+            data: {
+              body: `${user?.name} followed you`,
+              userId: userId,
+            },
+          }),
+          prisma.user.update({
+            where: { id: userId },
+            data: { hasNotification: true },
+          }),
+        ]);
+      } catch (err) {
+        console.error("Error creating notification or updating user:", err);
+      }
     }
 
     const updatedUser = await prisma.user.update({

@@ -48,6 +48,10 @@ export async function postComment(data: {
       },
     });
 
+    if (!post) {
+      throw new Error("post not found");
+    }
+
     const comment = await prisma.comment.create({
       data: {
         body,
@@ -57,21 +61,23 @@ export async function postComment(data: {
       },
     });
 
-    try {
-      await prisma.$transaction([
-        prisma.notification.create({
-          data: {
-            body: `${user?.name} replied your post`,
-            userId: comment.userId,
-          },
-        }),
-        prisma.user.update({
-          where: { id: post?.userId },
-          data: { hasNotification: true },
-        }),
-      ]);
-    } catch (err) {
-      console.error("Error creating notification or updating user:", err);
+    if (comment) {
+      try {
+        await prisma.$transaction([
+          prisma.notification.create({
+            data: {
+              body: `${user?.name} replied to your post`,
+              userId: post?.userId,
+            },
+          }),
+          prisma.user.update({
+            where: { id: post?.userId },
+            data: { hasNotification: true },
+          }),
+        ]);
+      } catch (err) {
+        console.error("Error creating notification or updating user:", err);
+      }
     }
 
     return {
