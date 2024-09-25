@@ -49,7 +49,7 @@ const Sidebar = () => {
     },
     {
       label: "Premium",
-      href: "/premium",
+      href: "#premium",
     },
     {
       label: "Profile",
