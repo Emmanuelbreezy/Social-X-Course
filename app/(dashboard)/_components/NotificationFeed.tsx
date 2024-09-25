@@ -3,8 +3,7 @@
 import React from "react";
 import { Spinner } from "@/components/spinner";
 import useNotifications from "@/hooks/useNotifications";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import Link from "next/link";
+import Logo from "@/components/logo";
 
 const NotificationFeed = () => {
   const { data, isLoading } = useNotifications();
@@ -39,22 +38,7 @@ const NotificationFeed = () => {
           p-6 gap-4 border-b-[1px]
           "
         >
-          <Link href={`/${notification?.user?.username}`}>
-            <Avatar role="button">
-              <AvatarImage
-                src={
-                  notification?.user?.profileImage ||
-                  notification?.user?.image ||
-                  ""
-                }
-                alt={notification?.user.username || ""}
-                className="object-cover"
-              />
-              <AvatarFallback className="font-bold text-[60px]">
-                {notification?.user?.name}
-              </AvatarFallback>
-            </Avatar>
-          </Link>
+          <Logo className="!size-5" />
           <p className="dark:text-white">{notification.body}</p>
         </div>
       ))}

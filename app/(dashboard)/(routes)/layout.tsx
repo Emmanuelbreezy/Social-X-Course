@@ -4,6 +4,9 @@ import Sidebar from "../_components/Sidebar";
 import Rightbar from "../_components/Rightbar";
 import EditProfileModal from "../_components/EditProfileModal";
 import { auth } from "@/lib/auth";
+//import { useSession } from "next-auth/react";
+// import Logo from "@/components/logo";
+// import { Spinner } from "@/components/spinner";
 // import Logo from "@/components/logo";
 // import { Spinner } from "@/components/spinner";
 
@@ -11,7 +14,7 @@ async function MainLayout({ children }: { children: ReactNode }) {
   const session = await auth();
 
   // if (status === "loading") {
-  //   return (
+  //   return (`
   //     <div className="flex flex-col h-screen items-center w-full justify-center">
   //       <Logo width="70px" height="70px" />
   //       <Spinner size="icon" />

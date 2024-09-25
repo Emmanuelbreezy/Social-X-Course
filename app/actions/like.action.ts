@@ -11,6 +11,16 @@ export async function likePost(postId: number) {
   try {
     const currentUserId = +session?.user?.id;
 
+    const user = await prisma.user.findUnique({
+      where: {
+        id: currentUserId,
+      },
+    });
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
     if (!postId) {
       throw new Error("Post Id is required");
     }
@@ -45,8 +55,8 @@ export async function likePost(postId: number) {
         await prisma.$transaction([
           prisma.notification.create({
             data: {
-              body: `liked your post`,
-              userId: currentUserId,
+              body: `${user?.name} liked your post`,
+              userId: post.userId,
             },
           }),
           prisma.user.update({
