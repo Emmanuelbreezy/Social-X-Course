@@ -6,6 +6,7 @@ import SessionProviders from "@/context/session-provider";
 import { Toaster } from "@/components/ui/toaster";
 
 import "./globals.css";
+import QueryProvider from "@/context/query-provider";
 
 const dmSans = DM_Sans({ subsets: ["latin"] });
 
@@ -23,15 +24,17 @@ export default function RootLayout({
     <html lang="en">
       <body className={cn("bg-background", dmSans.className)}>
         <SessionProviders>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="dark"
-            enableSystem
-            disableTransitionOnChange
-          >
-            {children}
-            <Toaster />
-          </ThemeProvider>
+          <QueryProvider>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="dark"
+              enableSystem
+              disableTransitionOnChange
+            >
+              {children}
+              <Toaster />
+            </ThemeProvider>
+          </QueryProvider>
         </SessionProviders>
       </body>
     </html>

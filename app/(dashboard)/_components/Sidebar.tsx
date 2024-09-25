@@ -1,7 +1,6 @@
 "use client";
 import Logo from "@/components/logo";
 import React from "react";
-import SidebarItem from "./_common/SidebarItem";
 import { Bell, Home, LucideIcon, Search, Settings, User } from "lucide-react";
 //import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -13,14 +12,16 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Spinner } from "@/components/spinner";
 import { doLogout } from "@/app/actions/auth.action";
-import SidebarTweetButton from "./_common/SidebarTweetButton";
-import { UserType } from "@/types/user.type";
 import useCurrentUser from "@/hooks/useCurrentUser";
+import { UserType } from "@/types/user.type";
+import SidebarTweetButton from "./_common/SidebarTweetButton";
+import SidebarItem from "./_common/SidebarItem";
 
 interface MenuType {
   label: string;
   href?: string;
   icon?: LucideIcon;
+  alert?: boolean;
 }
 
 const Sidebar = () => {
@@ -46,6 +47,7 @@ const Sidebar = () => {
       label: "Notifications",
       href: "/notifications",
       icon: Bell,
+      alert: fetchedUser?.hasNotification || false,
     },
     {
       label: "Premium",
@@ -83,6 +85,7 @@ const Sidebar = () => {
                   href={item.href}
                   label={item.label}
                   icon={item.icon}
+                  alert={item.alert}
                 />
               );
             })}

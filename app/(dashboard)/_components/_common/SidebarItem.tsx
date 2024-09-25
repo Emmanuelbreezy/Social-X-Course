@@ -1,6 +1,6 @@
 "use client";
 import React, { FC, Fragment, useCallback } from "react";
-import { Ellipsis, LucideIcon } from "lucide-react";
+import { Dot, Ellipsis, LucideIcon } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useRouter } from "next/navigation";
 import Logo from "@/components/logo";
@@ -10,6 +10,7 @@ interface PropsType {
   href?: string;
   icon?: LucideIcon;
   isUser?: boolean;
+  alert?: boolean;
   userInfo?: {
     profileImgUrl: string;
     username: string;
@@ -26,6 +27,7 @@ const SidebarItem: FC<PropsType> = (props) => {
     icon: Icon,
     onClick,
     href,
+    alert,
   } = props;
   const router = useRouter();
   const handleClick = useCallback(() => {
@@ -62,10 +64,13 @@ const SidebarItem: FC<PropsType> = (props) => {
           </Avatar>
         ) : (
           <>
-            {href === "/premium" && <Logo width="28px" height="28px" />}
+            {href === "#premium" && <Logo width="28px" height="28px" />}
 
             {Icon && (
               <Icon size={28} className="text-[#14171A] dark:text-white" />
+            )}
+            {alert && (
+              <Dot className="text-primary absolute -top-4 left-0" size={70} />
             )}
           </>
         )}
@@ -111,13 +116,16 @@ const SidebarItem: FC<PropsType> = (props) => {
           </div>
         ) : (
           <Fragment>
-            {href === "/premium" && <Logo width="24px" height="24px" />}
+            {href === "#premium" && <Logo width="24px" height="24px" />}
             {Icon && (
               <Icon size={24} className="text-[#14171A] dark:text-white" />
             )}
             <span className="hidden lg:block text-[#14171A] dark:text-white text-xl">
               {label}
             </span>
+            {alert && (
+              <Dot className="text-primary absolute -top-5 -left-1" size={70} />
+            )}
           </Fragment>
         )}
       </div>
