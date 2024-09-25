@@ -19,6 +19,8 @@ export const {
 
   providers: [
     GoogleProvider({
+      clientId: process.env.AUTH_GOOGLE_ID,
+      clientSecret: process.env.AUTH_GOOGLE_SECRET,
       profile: async (profile) => {
         const baseUsername = generateBaseUsername(profile.name);
         const uniqueUsername = await ensureUniqueUsername(baseUsername);
